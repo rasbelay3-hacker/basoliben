@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>የባሶሊበን ወጣቶች ኦንላይን እቁብ ማህበር</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; text-align: center; color: #333; }
+        header { background-color: #1b365d; color: white; padding: 25px 15px; font-size: 22px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .notice { background-color: #e74c3c; color: white; padding: 10px; font-size: 14px; font-weight: bold; }
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        .card { background: white; padding: 18px; margin: 15px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border-top: 4px solid #1b365d; }
+        .card h3 { margin-top: 0; color: #1b365d; }
+        button { background-color: #27ae60; color: white; border: none; padding: 12px 20px; font-size: 15px; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; transition: background 0.3s; }
+        button:hover { background-color: #219150; }
+        select, input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .payment-info { background-color: #e8f8f5; border: 1px solid #27ae60; padding: 10px; border-radius: 6px; margin-top: 10px; text-align: left; }
+        .result-box { margin-top: 10px; padding: 10px; background-color: #fff8e1; border-radius: 6px; border: 1px solid #ffe082; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>የባሶሊበን ወጣቶች ኦንላይን እቁብ ማህበር</header>
+
+<div class="notice">
+    ክፍያ በቴሌብር ይላኩ፡ 0988721313 (መንግስቱ)
+</div>
+
+<div class="container">
+
+    <!-- የእቁብ ክፍል -->
+    <div class="card">
+        <h3>ዕለታዊ እቁብ</h3>
+        <p>የዕለታዊ እቁብ መጠን፡ <strong>100 ብር</strong></p>
+        <div class="payment-info">
+            <p>📲 <strong>የቴሌብር አከፋፈል፡</strong></p>
+            <p>1. ወደ <strong>0988721313 (መንግስቱ)</strong> 100 ብር ይላኩ::</p>
+            <p>2. የላኩበትን የክፍያ ማረጋገጫ ለቁጥሩ በSMS ወይም Telegram ይላኩ::</p>
+        </div>
+    </div>
+
+    <!-- የሎተሪ ክፍል -->
+    <div class="card">
+        <h3>ዕለታዊ ሎተሪዎች</h3>
+        <label for="lottery-type"><strong>የሎተሪ አይነት ይምረጡ፡</strong></label>
+        <select id="lottery-type">
+            <option value="5_250">በ5 ብር - 250 ብር ደራሽ</option>
+            <option value="7_300">በ7 ብር - 300 ብር ደራሽ</option>
+            <option value="10_1000">በ10 ብር - 1000 ብር ደራሽ</option>
+        </select>
+        <button onclick="cutTicket()">ዕጣ ቁጥር ቁረጥ</button>
+        <div id="lottery-result" class="result-box" style="display:none;"></div>
+    </div>
+
+    <!-- የነጥብ መሰብሰቢያ ጌሞች -->
+    <div class="card">
+        <h3>የነጥብ መሰብሰቢያ ጌሞች (በ5 ብር ጀምሮ)</h3>
+        <p>የእርስዎ ነጥብ፡ <strong id="user-score" style="color: #e67e22; font-size: 18px;">0</strong> ነጥብ</p>
+        
+        <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+
+        <!-- ጌም 1 -->
+        <h4>1. የእድል ጎማ (Spin & Win) - 5 ብር</h4>
+        <button onclick="playSpin()">ጎማውን አሽክርክር</button>
+        <p id="spin-result"></p>
+
+        <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+
+        <!-- ጌም 2 -->
+        <h4>2. የቁጥር መገመት ጌም (1-10) - 5 ብር</h4>
+        <input type="number" id="guess-input" placeholder="ከ1 እስከ 10 ቁጥር አስገባ" min="1" max="10">
+        <button onclick="playGuess()">ገምት እና ተወዳደር</button>
+        <p id="guess-result"></p>
+    </div>
+
+</div>
+
+<script>
+    let score = 0;
+
+    function cutTicket() {
+        let type = document.getElementById("lottery-type").value;
+        let ticketNum = Math.floor(100000 + Math.random() * 900000);
+        let text = "";
+
+        if(type === "5_250") {
+            text = "የ5 ብር ዕጣ ቁጥርዎ፡ " + ticketNum + " ነው። እባክዎን 5 ብር ወደ 0988721313 (መንግስቱ) ይላኩ።";
+        } else if(type === "7_300") {
+            text = "የ7 ብር ዕጣ ቁጥርዎ፡ " + ticketNum + " ነው። እባክዎን 7 ብር ወደ 0988721313 (መንግስቱ) ይላኩ።";
+        } else if(type === "10_1000") {
+            text = "የ10 ብር ዕጣ ቁጥርዎ፡ " + ticketNum + " ነው። እባክዎን 10 ብር ወደ 0988721313 (መንግስቱ) ይላኩ።";
+        }
+
+        let resDiv = document.getElementById("lottery-result");
+        resDiv.style.display = "block";
+        resDiv.innerText = text;
+    }
+
+    function playSpin() {
+        let wonScore = Math.floor(Math.random() * 50) + 10;
+        score += wonScore;
+        document.getElementById("user-score").innerText = score;
+        document.getElementById("spin-result").innerText = "እንኳን ደስ አለዎት! " + wonScore + " ነጥብ አግኝተዋል!";
+    }
+
+    function playGuess() {
+        let userGuess = parseInt(document.getElementById("guess-input").value);
+        if(!userGuess || userGuess < 1 || userGuess > 10) {
+            alert("እባክዎን ከ1 እስከ 10 ያለ ቁጥር አስገቡ!");
+            return;
+        }
+        let randomNum = Math.floor(Math.random() * 10) + 1;
+        if(userGuess === randomNum) {
+            score += 100;
+            document.getElementById("user-score").innerText = score;
+            document.getElementById("guess-result").innerText = "ትክክል ነው! ቁጥሩ " + randomNum + " ነበር:: +100 ነጥብ አግኝተዋል!";
+        } else {
+            document.getElementById("guess-result").innerText = "አልተካካም! ትክክለኛው ቁጥር " + randomNum + " ነበር:: ድጋሚ ይሞክሩ!";
+        }
+    }
+</script>
+
+</body>
+</html>
