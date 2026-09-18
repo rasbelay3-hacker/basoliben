@@ -3,74 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>የባሶሊበን ወጣቶች ኦንላይን ሎተሪ ማህበር</title>
+    <title>የባሶሊበን ወጣቶች ኦንላይን እቁብና ሎተሪ</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f0f2f5; margin: 0; padding: 15px; }
-        .container { max-width: 450px; margin: 0 auto; }
-        .header { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .header h1 { margin: 0; font-size: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .card h2 { margin-top: 0; color: #0d6efd; font-size: 18px; border-bottom: 2px solid #f0f2f5; padding-bottom: 8px; }
-        .form-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 15px; }
-        .btn { width: 100%; background: #198754; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: #157347; }
-        .notice { background: #fff3cd; border: 1px solid #ffe69c; color: #664d03; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; }
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding: 20px; }
+        .card { background: white; max-width: 400px; margin: auto; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input, button { width: 90%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; }
+        button { background: #28a745; color: white; font-weight: bold; cursor: pointer; border: none; }
+        button:hover { background: #218838; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>የባሶሊበን ወጣቶች ኦንላይን ሎተሪ ማህበር</h1>
-    </div>
+<div class="card">
+    <h2>የባሶሊበን እለታዊ ሎተሪ</h2>
+    <p>በ 10 ብር የ 1000 ብር ዕድለኛ ይሁኑ!</p>
+    
+    <input type="text" id="name" placeholder="ሙሉ ስም አስገባ">
+    <input type="tel" id="phone" placeholder="የስልክ ቁጥር (09...)" required>
+    <button onclick="buyTicket()">ዕጣ ቁረጥ (10 ብር)</button>
 
-    <div class="notice">
-        📌 <b>ማሳሰቢያ፡</b> ዕጣ ከቆረጡ በኋላ የክፍያ ማረጋገጫ ቁጥሩን (Txn ID) ማስገባትዎን አይርሱ!
-    </div>
-
-    <div class="card">
-        <h2>🎟️ ዕለታዊ ሎተሪ ቁረጥ</h2>
-        
-        <div class="form-group">
-            <label>ሙሉ ስም</label>
-            <input type="text" id="fullname" placeholder="ስምዎን ያስገቡ">
-        </div>
-
-        <div class="form-group">
-            <label>የስልክ ቁጥር (ቴሌብር)</label>
-            <input type="tel" id="phone" placeholder="09........">
-        </div>
-
-        <div class="form-group">
-            <label>የሎተሪ ዓይነት ይምረጡ</label>
-            <select id="lotteryType">
-                <option value="5">በ 5 ብር - 250 ብር ደራሽ</option>
-                <option value="10">በ 10 ብር - 1,000 ብር ደራሽ</option>
-                <option value="20">በ 20 ብር - 2,500 ብር ደራሽ</option>
-            </select>
-        </div>
-
-        <button class="btn" onclick="submitTicket()">በቴሌብር ይክፈሉ እና ዕጣ ይቁረጡ</button>
-    </div>
+    <p id="status"></p>
 </div>
 
 <script>
-function submitTicket() {
-    var name = document.getElementById('fullname').value;
-    var phone = document.getElementById('phone').value;
-    var amount = document.getElementById('lotteryType').value;
+    const SUPABASE_URL = "https://crkbpmksuhzlpdignery.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_fcobv7kpWIluf6C6ZxwplQ_njVh2WFL";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    if(!name || !phone) {
-        alert("እባክዎን ስምዎን እና የስልክ ቁጥርዎን ያስገቡ!");
-        return;
+    async function buyTicket() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const status = document.getElementById('status');
+
+        if (!name || !phone) {
+            status.innerText = "እባክዎን ስምና ስልክ ቁጥር ያስገቡ!";
+            status.style.color = "red";
+            return;
+        }
+
+        status.innerText = "መረጃው እየተመዘገበ ነው...";
+        status.style.color = "black";
+
+        const ticketNumber = Math.floor(100000 + Math.random() * 900000);
+
+        const { data, error } = await supabaseClient
+            .from('users')
+            .insert([{ name: name, phone: phone, ticket_number: ticketNumber }]);
+
+        if (error) {
+            status.innerText = "ስህተት አጋጥሟል፡ " + error.message;
+            status.style.color = "red";
+        } else {
+            status.innerText = `እንኳን ደስ አለዎት! የዕጣ ቁጥርዎ፡ ${ticketNumber} ነው::`;
+            status.style.color = "green";
+        }
     }
-
-    alert("ሰላም " + name + "! ወደ ቴሌብር በመሄድ የ " + amount + " ብር ክፍያ ለ 0988721313 ይፈጽሙ።");
-    window.location.href = "tel:*806*0988721313*" + amount + "%23";
-}
 </script>
 
 </body>
