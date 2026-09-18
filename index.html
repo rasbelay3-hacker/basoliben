@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Meta Tags - Google ላይ ሰርች ሲደረግ እንዲገኝ የሚያደርጉ -->
     <title>የባሶሊበን ወጣቶች ኦንላይን እቁብ ማህበር</title>
     <meta name="description" content="የባሶሊበን ወጣቶች ኦንላይን እቁብ ማህበር - ዕለታዊ እቁብ፣ ዕለታዊ ሎተሪዎች እና የነጥብ መሰብሰቢያ ጌሞች በቴሌብር።">
     <meta name="keywords" content="የባሶሊበን ወጣቶች ኦንላይን እቁብ ማህበር, ባሶሊበን, እቁብ, ሎተሪ, ቴሌብር, Basoliben, Equb">
@@ -81,6 +79,9 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
+            display: block;
+            text-align: center;
+            text-decoration: none;
         }
         .btn:hover {
             background-color: #2f855a;
@@ -111,6 +112,7 @@
                     <li>የላኩበትን የክፍያ ማረጋገጫ ለቁጥሩ በSMS ወይም Telegram ይላኩ።</li>
                 </ol>
             </div>
+            <a href="tel:*806*0988721313*100%23" class="btn">በቴሌብር 100 ብር ክፈል</a>
         </div>
 
         <!-- ዕለታዊ ሎተሪዎች -->
@@ -118,12 +120,12 @@
             <h2 class="card-title">ዕለታዊ ሎተሪዎች</h2>
             <p style="text-align: center; font-size: 15px;">የሎተሪ ዓይነት ይምረጡ:</p>
             
-            <select class="select-box">
-                <option>በ5 ብር - 250 ብር ደራሽ</option>
-                <option>በ10 ብር - 1000 ብር ደራሽ</option>
+            <select id="lotterySelect" class="select-box">
+                <option value="5">በ5 ብር - 250 ብር ደራሽ</option>
+                <option value="10">በ10 ብር - 1000 ብር ደራሽ</option>
             </select>
 
-            <button class="btn">ዕጣ ቁጥር ቁረጥ</button>
+            <button class="btn" onclick="payLottery()">ዕጣ ቁጥር ቁረጥ (ክፈል)</button>
         </div>
 
         <!-- የነጥብ መሰብሰቢያ ጌሞች -->
@@ -133,6 +135,16 @@
         </div>
 
     </div>
+
+    <script>
+        function payLottery() {
+            var amount = document.getElementById("lotterySelect").value;
+            var phone = "0988721313";
+            alert("ሎተሪ ለመቁረጥ ወደ " + phone + " የ " + amount + " ብር ክፍያ ያድርጉ!");
+            // ወደ ስልክ መደወያ ለመውሰድ
+            window.location.href = "tel:*806*" + phone + "*" + amount + "%23";
+        }
+    </script>
 
 </body>
 </html>
